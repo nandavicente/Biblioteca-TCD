@@ -18,9 +18,9 @@ public class Main {
         Livro livro2 = new Livro(2L, "Dom Casmurro", "Machado de Assis", 1899, true);
         Livro livro3 = new Livro(3L, "Dom Casmurro", "Machado de Assis", 1899, true);
 
-        Usuario usuario1 = new Usuario(1L, "Aline", "aline@");
-        Usuario usuario2 = new Usuario(2L, "João Vitor", "joao@");
-        Usuario usuario3 = new Usuario(3L, "Maria Fernanda", "mfov@");
+        Usuario usuario1 = new Usuario(1, "Aline", "313536", "aline@");
+        Usuario usuario2 = new Usuario(2, "João Vitor", "213241", "joao@algumDominio.com.br");
+        Usuario usuario3 = new Usuario(3, "Maria Fernanda", "524321", "mfov@");
 
         Emprestimo emprestimo1 = new Emprestimo(1L, livro1.getId(), usuario1.getId(), LocalDate.now(), null);
 
