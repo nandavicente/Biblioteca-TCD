@@ -48,7 +48,7 @@ Criação de um sistema de gerenciamento de biblioteca para a Biblioteca Central
 <p align="center">
   <img src="images/Emprestimo_UML.png" alt="Diagrama UML da entidade Livro" width="300">
 </p>
-
+ 
 > 💡 A entidade Empréstimo formaliza a transação entre um usuário e um livro.
 
 **Atributos:** 
