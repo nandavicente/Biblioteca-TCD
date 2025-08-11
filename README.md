@@ -3,7 +3,7 @@ Trabalho de conclusão da disciplina de Programação Orientada a Objetos do 4º
 
 ## Objetivo 🎯
 Criação de um sistema de gerenciamento de biblioteca para a Biblioteca Central do IFNMG, com o intuito de informatizar os processos de registro, controle e consulta de livros, usuários e empréstimos.
-
+<br/>
 ## Entidades e regras de negócio
 ### 📙 Livro
 
@@ -23,7 +23,7 @@ Criação de um sistema de gerenciamento de biblioteca para a Biblioteca Central
 **Regras de Negócio:** 
 - Um livro pode ser emprestado somente se seu status estiver como disponivel. 
 - Ao ser emprestado, o atributo disponivel deve ser atualizado para ```false```, e retorna a ```true``` quando o livro é devolvido.
-
+<br/>
 
 ### 👤 Usuário
 
@@ -41,7 +41,7 @@ Criação de um sistema de gerenciamento de biblioteca para a Biblioteca Central
 
 **Regras de Negócio:** 
 - Apenas usuários que já possuem um cadastro no sistema podem realizar empréstimos.
-
+<br/>
 
 ### 📋 Empréstimo
 
