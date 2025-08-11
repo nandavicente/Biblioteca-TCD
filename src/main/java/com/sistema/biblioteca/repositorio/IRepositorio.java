@@ -15,6 +15,8 @@ public interface IRepositorio<T> {
     void moverColecaoParaLixeira(List<T> lista);
     List<T> recuperarTodosDaLixeira();
     T recuperarDaLixeiraPorId(Long id);
+    void restaurarPorId(Long id);
+    void restaurarTodosDaLixeira();
     void excluirDefinitivo(T obj);
     void excluirDefinitivoPorId(Long id);
     void esvaziarLixeira();

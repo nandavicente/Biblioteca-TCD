@@ -150,6 +150,27 @@ public class UsuarioRepositorioJDBC implements IRepositorio<Usuario> {
         return null;
     }
 
+    public void restaurarPorId(Long id) {
+        String sql = "UPDATE usuario SET na_lixeira=false WHERE id=?";
+        try (Connection conn = ConexaoBanco.getConexao();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setLong(1, id);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void restaurarTodosDaLixeira() {
+        String sql = "UPDATE usuario SET na_lixeira=false WHERE na_lixeira=true";
+        try (Connection conn = ConexaoBanco.getConexao();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     @Override
     public void excluirDefinitivo(Usuario obj) {
         excluirDefinitivoPorId(obj.getId());

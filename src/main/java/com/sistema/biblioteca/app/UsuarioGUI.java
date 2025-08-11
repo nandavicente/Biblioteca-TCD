@@ -7,6 +7,8 @@ import com.sistema.biblioteca.repositorio.UsuarioRepositorioJDBC;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.util.List;
+import java.util.ArrayList;
 
 public class UsuarioGUI extends JFrame {
     private IRepositorio<Usuario> usuarioRepo = new UsuarioRepositorioJDBC();
@@ -33,6 +35,7 @@ public class UsuarioGUI extends JFrame {
         // Painel de usuários ativos
         JPanel painelAtivos = new JPanel(new BorderLayout());
         tabelaAtivos = new JTable();
+        tabelaAtivos.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION); // permite selecionar várias linhas
         painelAtivos.add(new JScrollPane(tabelaAtivos), BorderLayout.CENTER);
 
         JPanel painelBotoesAtivos = new JPanel();
@@ -52,19 +55,24 @@ public class UsuarioGUI extends JFrame {
         // Painel da lixeira
         JPanel painelLixeira = new JPanel(new BorderLayout());
         tabelaLixeira = new JTable();
+        tabelaLixeira.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION); // permite selecionar várias linhas
         painelLixeira.add(new JScrollPane(tabelaLixeira), BorderLayout.CENTER);
 
         JPanel painelBotoesLixeira = new JPanel();
-        JButton btnRestaurar = new JButton("♻️ Restaurar");
+        JButton btnRestaurar = new JButton("♻️ Restaurar selecionado");
         JButton btnExcluirDef = new JButton("❌ Excluir Definitivo");
         JButton btnEsvaziar = new JButton("🧹 Esvaziar Lixeira");
+        JButton btnRestaurarTodos = new JButton("♻️ Restaurar Todos");
+
 
         painelBotoesLixeira.add(btnRestaurar);
+        painelBotoesLixeira.add(btnRestaurarTodos);
         painelBotoesLixeira.add(btnExcluirDef);
         painelBotoesLixeira.add(btnEsvaziar);
         painelLixeira.add(painelBotoesLixeira, BorderLayout.SOUTH);
 
         btnRestaurar.addActionListener(e -> restaurarUsuario());
+        btnRestaurarTodos.addActionListener(e -> restaurarTodosUsuarios());
         btnExcluirDef.addActionListener(e -> excluirDefinitivo());
         btnEsvaziar.addActionListener(e -> esvaziarLixeira());
 
@@ -128,7 +136,12 @@ public class UsuarioGUI extends JFrame {
                 "Email:", emailField
         };
 
-        int opcao = JOptionPane.showConfirmDialog(this, mensagem, "Adicionar Usuário", JOptionPane.OK_CANCEL_OPTION);
+        int opcao = JOptionPane.showConfirmDialog(
+                this,
+                mensagem,
+                "Adicionar Usuário",
+                JOptionPane.OK_CANCEL_OPTION
+        );
         if (opcao == JOptionPane.OK_OPTION) {
             if (nomeField.getText().trim().isEmpty() || matriculaField.getText().trim().isEmpty() || !emailField.getText().contains("@")) {
                 JOptionPane.showMessageDialog(this, "Dados inválidos. Verifique os campos.", "Erro", JOptionPane.ERROR_MESSAGE);
@@ -161,7 +174,12 @@ public class UsuarioGUI extends JFrame {
                     "Email:", emailField
             };
 
-            int opcao = JOptionPane.showConfirmDialog(this, mensagem, "Editar Usuário", JOptionPane.OK_CANCEL_OPTION);
+            int opcao = JOptionPane.showConfirmDialog(
+                    this,
+                    mensagem,
+                    "Editar Usuário",
+                    JOptionPane.OK_CANCEL_OPTION
+            );
             if (opcao == JOptionPane.OK_OPTION) {
                 if (nomeField.getText().trim().isEmpty() || matriculaField.getText().trim().isEmpty() || !emailField.getText().contains("@")) {
                     JOptionPane.showMessageDialog(this, "Dados inválidos. Verifique os campos.", "Erro", JOptionPane.ERROR_MESSAGE);
@@ -177,44 +195,81 @@ public class UsuarioGUI extends JFrame {
     }
 
     private void moverParaLixeira() {
-        int linha = tabelaAtivos.getSelectedRow();
-        if (linha >= 0) {
-            int confirm = JOptionPane.showConfirmDialog(this, "Mover para lixeira?", "Confirmação", JOptionPane.YES_NO_OPTION);
+        int[] linhas = tabelaAtivos.getSelectedRows();
+        if (linhas.length > 0) {
+            int confirm = JOptionPane.showConfirmDialog(this,
+                    "Mover " + linhas.length + " usuário(s) para a lixeira?",
+                    "Confirmação", JOptionPane.YES_NO_OPTION);
+
             if (confirm == JOptionPane.YES_OPTION) {
-                Long id = (Long) tabelaAtivos.getValueAt(linha, 0);
-                usuarioRepo.moverParaLixeiraPorId(id);
+                List<Usuario> lista = new ArrayList<>();
+                for (int linha : linhas) {
+                    Long id = (Long) tabelaAtivos.getValueAt(linha, 0);
+                    Usuario usuario = usuarioRepo.buscarPorId(id);
+                    if (usuario != null) {
+                        lista.add(usuario);
+                    }
+                }
+                usuarioRepo.moverColecaoParaLixeira(lista);
                 atualizarTabelas();
             }
         }
     }
 
     private void restaurarUsuario() {
-        int linha = tabelaLixeira.getSelectedRow();
-        if (linha >= 0) {
-            Long id = (Long) tabelaLixeira.getValueAt(linha, 0);
-            Usuario usuario = usuarioRepo.recuperarDaLixeiraPorId(id);
-            if (usuario != null) {
-                usuario.setNaLixeira(false);
-                usuarioRepo.atualizar(usuario);
+        int[] linhas = tabelaLixeira.getSelectedRows();
+        if (linhas.length > 0) {
+            for (int linha : linhas) {
+                Long id = (Long) tabelaLixeira.getValueAt(linha, 0);
+                usuarioRepo.restaurarPorId(id);
             }
             atualizarTabelas();
         }
     }
 
-    private void excluirDefinitivo() {
-        int linha = tabelaLixeira.getSelectedRow();
-        if (linha >= 0) {
-            int confirm = JOptionPane.showConfirmDialog(this, "Excluir definitivamente este usuário?", "Confirmação", JOptionPane.YES_NO_OPTION);
-            if (confirm == JOptionPane.YES_OPTION) {
-                Long id = (Long) tabelaLixeira.getValueAt(linha, 0);
-                usuarioRepo.excluirDefinitivoPorId(id);
+
+    private void restaurarTodosUsuarios() {
+        int confirm = JOptionPane.showConfirmDialog(
+            this,
+            "Deseja restaurar todos os usuários da lixeira?",
+            "Confirmação",
+            JOptionPane.YES_NO_OPTION
+        );
+        if (confirm == JOptionPane.YES_OPTION) {
+            if (usuarioRepo instanceof UsuarioRepositorioJDBC jdbcRepo) {
+                jdbcRepo.restaurarTodosDaLixeira();
                 atualizarTabelas();
             }
         }
     }
 
+    private void excluirDefinitivo() {
+        int[] linhas = tabelaLixeira.getSelectedRows(); // várias linhas
+        if (linhas.length > 0) {
+            int confirm = JOptionPane.showConfirmDialog(
+                    this,
+                    "Excluir definitivamente os usuários selecionados?",
+                    "Confirmação",
+                    JOptionPane.YES_NO_OPTION
+            );
+            if (confirm == JOptionPane.YES_OPTION) {
+                for (int linha : linhas) {
+                    Long id = (Long) tabelaLixeira.getValueAt(linha, 0);
+                    usuarioRepo.excluirDefinitivoPorId(id);
+                }
+                atualizarTabelas();
+            }
+        }
+    }
+
+
     private void esvaziarLixeira() {
-        int confirm = JOptionPane.showConfirmDialog(this, "Esvaziar toda a lixeira?", "Confirmação", JOptionPane.YES_NO_OPTION);
+        int confirm = JOptionPane.showConfirmDialog(
+                this,
+                "Esvaziar toda a lixeira?",
+                "Confirmação",
+                JOptionPane.YES_NO_OPTION
+        );
         if (confirm == JOptionPane.YES_OPTION) {
             usuarioRepo.esvaziarLixeira();
             atualizarTabelas();
