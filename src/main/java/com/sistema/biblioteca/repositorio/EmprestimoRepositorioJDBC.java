@@ -1,6 +1,7 @@
 package com.sistema.biblioteca.repositorio;
 
 import com.sistema.biblioteca.entidade.Emprestimo;
+import com.sistema.biblioteca.repositorio.ConexaoBanco;
 
 import java.sql.*;
 import java.time.LocalDate;
