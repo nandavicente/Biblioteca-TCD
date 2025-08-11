@@ -89,5 +89,17 @@ public class Emprestimo {
         this.naLixeira = naLixeira;
     }
     //</editor-fold>
+    
+     // Metodo_para exibir
+    @Override
+    public String toString() {
+        return "Emprestimo{" +
+                "id=" + id +
+                ", id livro =" + idLivro +
+                ", id usuario =" + idUsuario +
+                ", data Emprestimo =" + dataEmprestimo +
+                ", Devolucao =" + dataPrevista +
+                '}';
+    }
 
 }
