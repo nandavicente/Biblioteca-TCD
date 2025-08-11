@@ -2,13 +2,17 @@ package com.sistema.biblioteca.entidade;
 
 public class Usuario {
     // Atributos
-    private final long id;
+    private long id;
     private String nome;
     private String matricula;
     private String email;
     private boolean naLixeira;
 
-    // Construtor
+    // Construtores
+    public Usuario() {
+        // construtor vazio para JDBC
+    }
+
     public Usuario(long id, String nome, String matricula, String email) {
         this.id = id;
         this.nome = nome;
@@ -20,6 +24,10 @@ public class Usuario {
     // Getters e Setters
     public long getId() {
         return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getNome() {
