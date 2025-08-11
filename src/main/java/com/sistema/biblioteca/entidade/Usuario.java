@@ -62,7 +62,6 @@ public class Usuario {
         this.naLixeira = naLixeira;
     }
 
-
     // Metodo_para exibir
     @Override
     public String toString() {
