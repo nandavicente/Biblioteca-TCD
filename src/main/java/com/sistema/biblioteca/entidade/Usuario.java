@@ -2,21 +2,23 @@ package com.sistema.biblioteca.entidade;
 
 public class Usuario {
     // Atributos
-    private final int id;
+    private final long id;
     private String nome;
     private String matricula;
     private String email;
+    private boolean naLixeira;
 
     // Construtor
-    public Usuario(int id, String nome, String matricula, String email) {
+    public Usuario(long id, String nome, String matricula, String email) {
         this.id = id;
         this.nome = nome;
         this.matricula = matricula;
         this.email = email;
+        this.naLixeira = false;
     }
 
     // Getters e Setters
-    public int getId() {
+    public long getId() {
         return id;
     }
 
@@ -44,10 +46,24 @@ public class Usuario {
         this.matricula = matricula;
     }
 
+    public boolean isNaLixeira() {
+        return naLixeira;
+    }
+
+    public void setNaLixeira(boolean naLixeira) {
+        this.naLixeira = naLixeira;
+    }
+
+
     // Metodo_para exibir
-    public void exibirInfo() {
-        System.out.println("Nome: " + nome);
-        System.out.println("Matrícula: " + matricula);
-        System.out.println("Email: " + email);
+    @Override
+    public String toString() {
+        return "Usuario{" +
+                "id=" + id +
+                ", nome='" + nome + '\'' +
+                ", matricula='" + matricula + '\'' +
+                ", email='" + email + '\'' +
+                ", naLixeira=" + naLixeira +
+                '}';
     }
 }
