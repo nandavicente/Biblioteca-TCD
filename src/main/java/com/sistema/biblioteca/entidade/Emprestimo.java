@@ -16,8 +16,7 @@ public class Emprestimo {
     private boolean naLixeira = false;
 
     //<editor-fold defaultstate="collapsed" desc="Construtores">
-    public Emprestimo(int id, int idLivro, int idUsuario) {
-        this.id = id;
+    public Emprestimo(int idLivro, int idUsuario) {
         this.idLivro = idLivro;
         this.idUsuario = idUsuario;
         this.dataEmprestimo = LocalDate.now();
@@ -83,7 +82,7 @@ public class Emprestimo {
     }
     //</editor-fold>
 
-    public void registrarDevolução() {
+    public void registrarDevolucao() {
         this.dataReal = LocalDate.now();
     }
 
