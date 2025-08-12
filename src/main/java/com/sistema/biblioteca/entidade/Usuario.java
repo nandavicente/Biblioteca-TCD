@@ -1,4 +1,8 @@
 package com.sistema.biblioteca.entidade;
+/**
+ *
+ * @author Vitor-Ribe
+ */
 
 public class Usuario {
     // Atributos

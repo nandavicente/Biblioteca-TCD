@@ -6,7 +6,7 @@ import java.awt.*;
 public class Desenha {
 
     // Método_ para estilizar botões
-    public static JButton BotaoEstilizado(String texto, Color bgColor, Color fontColor, int width, int height, int roundedWidth, int roundedHeight) {
+    public static JButton BotaoEstilizado(String texto, Color bgColor, Color fontColor, int width, int height, int roundedWidth, int roundedHeight, int fontSize) {
          JButton botao = new JButton(texto) {
             @Override
             protected void paintComponent(Graphics g) {
@@ -19,7 +19,7 @@ public class Desenha {
             }
         };
 
-        botao.setFont(new Font("Arial", Font.PLAIN, 20));
+        botao.setFont(new Font("Arial", Font.PLAIN, fontSize));
         botao.setFocusPainted(false);
         botao.setForeground(fontColor); // cor do texto
         botao.setContentAreaFilled(false); // impede pintura quadrada

@@ -45,9 +45,9 @@ public class BibliotecaAppGUI extends JFrame {
         painelBotoes.setPreferredSize(new Dimension(400, getHeight())); // largura fixa
 
 
-        JButton btnUsuarios = Desenha.BotaoEstilizado("Gerenciar Usuários", Cores.AZUL_CLARO, Cores.AZUL_MEDIO_ESCURO, 300, 100, 80, 80);
-        JButton btnLivros = Desenha.BotaoEstilizado("Gerenciar Livros", Cores.AZUL_MEDIO_CLARO, Color.WHITE, 300, 100, 80, 80);
-        JButton btnEmprestimos = Desenha.BotaoEstilizado("Gerenciar Empréstimos", Cores.AZUL_MEDIO, Cores.AZUL_CLARO, 300, 100, 80, 80);
+        JButton btnUsuarios = Desenha.BotaoEstilizado("Gerenciar Usuários", Cores.AZUL_CLARO, Cores.AZUL_MEDIO_ESCURO, 300, 100, 80, 80, 20);
+        JButton btnLivros = Desenha.BotaoEstilizado("Gerenciar Livros", Cores.AZUL_MEDIO_CLARO, Color.WHITE, 300, 100, 80, 80, 20);
+        JButton btnEmprestimos = Desenha.BotaoEstilizado("Gerenciar Empréstimos", Cores.AZUL_MEDIO, Cores.AZUL_CLARO, 300, 100, 80, 80, 20);
 
         // define espaçamento entre os botões
         painelBotoes.add(btnUsuarios);
@@ -89,7 +89,7 @@ public class BibliotecaAppGUI extends JFrame {
         JPanel rodape = new JPanel(new BorderLayout());
         rodape.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
 
-        JButton btnSair = Desenha.BotaoEstilizado("🚪 Sair", Cores.AZUL_MEDIO, Cores.AZUL_CLARO, 100, 40, 20, 20);
+        JButton btnSair = Desenha.BotaoEstilizado("🚪 Sair", Cores.AZUL_MEDIO, Cores.AZUL_CLARO, 100, 40, 20, 20, 20);
         btnSair.addActionListener(e -> System.exit(0));
 
         JLabel desenvolvidoPor = new JLabel("Desenvolvido por: Aline Soares, João Vitor Ribeiro e Maria Fernanda Vicente");

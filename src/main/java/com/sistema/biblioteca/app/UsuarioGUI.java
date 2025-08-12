@@ -3,6 +3,7 @@ package com.sistema.biblioteca.app;
 import com.sistema.biblioteca.entidade.Usuario;
 import com.sistema.biblioteca.repositorio.IRepositorio;
 import com.sistema.biblioteca.repositorio.UsuarioRepositorioJDBC;
+import com.sistema.biblioteca.util.*;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -30,14 +31,14 @@ public class UsuarioGUI extends JFrame {
         setSize(1000, 800);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
-        setBackground(new Color(2, 28, 65));
+        setBackground(Cores.AZUL_ESCURO);
 
         // --------- Painel superior --------------
         // Painel superior com botão Voltar
         JPanel painelTopo = new JPanel(new FlowLayout(FlowLayout.LEFT));
         painelTopo.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10)); // cima, esquerda, baixo, direita
 
-        JButton btnVoltar = criarBotaoEstilizado("⬅", 38, 102, 140, 255, 255, 255);
+        JButton btnVoltar = Desenha.BotaoEstilizado("⬅", Cores.AZUL_MEDIO, Color.WHITE, 40, 40, 80, 80, 14);
         btnVoltar.addActionListener(e -> {
             dispose(); // Fecha a janela atual
             //new BibliotecaAppGUI().setVisible(true); // Volta para tela inicial
@@ -110,41 +111,14 @@ public class UsuarioGUI extends JFrame {
 
         add(tabbedPane);
 
-
         atualizarTabelas();
     }
 
     private void estilizaBotao(JButton btn) {
         btn.setFont(new Font("Arial", Font.BOLD, 13)); // fonte
-        btn.setBackground(new Color(38, 102, 140)); // cor de fundo
+        btn.setBackground(Cores.AZUL_MEDIO); // cor de fundo
         btn.setForeground(Color.white);  // cor do texto
         btn.setPreferredSize(new Dimension(190, 40)); // tamanho preferido
-    }
-
-    // Método_ para estilizar botões
-    private JButton criarBotaoEstilizado(String texto, int red, int green, int blue, int fontRed, int fontGreen, int fontBlue) {
-         JButton botao = new JButton(texto) {
-            @Override
-            protected void paintComponent(Graphics g) {
-                Graphics2D g2 = (Graphics2D) g.create();
-                g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-                g2.setColor(new Color(red, green, blue)); // Cor de fundo
-                g2.fillRoundRect(0, 0, getWidth(), getHeight(), 80, 80); // arredondamento
-                super.paintComponent(g);
-                g2.dispose();
-            }
-        };
-
-        botao.setFont(new Font("Arial", Font.PLAIN, 14));
-        botao.setFocusPainted(false);
-        botao.setForeground(new Color(fontRed, fontGreen, fontBlue)); // cor do texto
-        botao.setContentAreaFilled(false); // impede pintura quadrada
-        botao.setBorderPainted(false);     // tira borda padrão
-        botao.setPreferredSize(new Dimension(40, 40));
-        botao.setMaximumSize(new Dimension(40, 40));
-        botao.setAlignmentX(Component.CENTER_ALIGNMENT);
-
-        return botao;
     }
 
     private void atualizarTabelas() {
