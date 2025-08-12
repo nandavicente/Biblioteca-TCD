@@ -1,7 +1,7 @@
 package com.sistema.biblioteca.repositorio;
 
 import com.sistema.biblioteca.entidade.Livro;
-import com.sistema.biblioteca.util.ConexaoBD;
+import com.sistema.biblioteca.repositorio.ConexaoBanco;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -12,14 +12,13 @@ public class LivroRepositorioJDBC {
     // Salvar novo livro
     public void salvar(Livro livro) {
         String sql = "INSERT INTO livro (id, titulo, autor, anoPublicacao, disponivel, naLixeira) VALUES (?, ?, ?, ?, ?, ?)";
-        try (Connection conn = ConexaoBD.getConnection();
+        try (Connection conn = ConexaoBanco.getConexao();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setLong(1, livro.getId());
             stmt.setString(2, livro.getTitulo());
             stmt.setString(3, livro.getAutor());
             stmt.setInt(4, livro.getAnoPublicacao());
-            stmt.setBoolean(5, livro.isDisponivel());
             stmt.setBoolean(6, livro.isNaLixeira());
 
             stmt.executeUpdate();
