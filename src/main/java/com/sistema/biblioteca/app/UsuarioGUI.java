@@ -3,6 +3,7 @@ package com.sistema.biblioteca.app;
 import com.sistema.biblioteca.entidade.Usuario;
 import com.sistema.biblioteca.repositorio.IRepositorio;
 import com.sistema.biblioteca.repositorio.UsuarioRepositorioJDBC;
+import com.sistema.biblioteca.util.*;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -24,13 +25,32 @@ public class UsuarioGUI extends JFrame {
             System.err.println("Não foi possível aplicar o LookAndFeel Nimbus");
         }
 
+        // Definições iniciais da Interface Gráfica / Janela
         usuarioRepo = new UsuarioRepositorioJDBC();
         setTitle("Gerenciamento de Usuários");
         setSize(1000, 800);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
+        setBackground(Cores.AZUL_ESCURO);
 
+        // --------- Painel superior --------------
+        // Painel superior com botão Voltar
+        JPanel painelTopo = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        painelTopo.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10)); // cima, esquerda, baixo, direita
+
+        JButton btnVoltar = Desenha.BotaoEstilizado("⬅", Cores.AZUL_MEDIO, Color.WHITE, 40, 40, 80, 80, 14);
+        btnVoltar.addActionListener(e -> {
+            dispose(); // Fecha a janela atual
+            //new BibliotecaAppGUI().setVisible(true); // Volta para tela inicial
+        });
+        painelTopo.add(btnVoltar);
+
+        // Adiciona o painelTopo antes de tudo
+        add(painelTopo, BorderLayout.NORTH);
+
+        // ---------------- Painéis com as tabelas --------------------------------
         tabbedPane = new JTabbedPane();
+        tabbedPane.setBorder(BorderFactory.createEmptyBorder(0, 40, 20, 40));
 
         // Painel de usuários ativos
         JPanel painelAtivos = new JPanel(new BorderLayout());
@@ -38,10 +58,15 @@ public class UsuarioGUI extends JFrame {
         tabelaAtivos.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION); // permite selecionar várias linhas
         painelAtivos.add(new JScrollPane(tabelaAtivos), BorderLayout.CENTER);
 
+        // Rodapé do painel de usuários ativos
         JPanel painelBotoesAtivos = new JPanel();
         JButton btnAdicionar = new JButton("➕ Adicionar");
         JButton btnEditar = new JButton("✏️ Editar");
         JButton btnMoverLixeira = new JButton("🗑️ Mover para Lixeira");
+
+        estilizaBotao(btnAdicionar);
+        estilizaBotao(btnEditar);
+        estilizaBotao(btnMoverLixeira);
 
         painelBotoesAtivos.add(btnAdicionar);
         painelBotoesAtivos.add(btnEditar);
@@ -58,12 +83,17 @@ public class UsuarioGUI extends JFrame {
         tabelaLixeira.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION); // permite selecionar várias linhas
         painelLixeira.add(new JScrollPane(tabelaLixeira), BorderLayout.CENTER);
 
+        // Rodapé do painel de lixeira
         JPanel painelBotoesLixeira = new JPanel();
         JButton btnRestaurar = new JButton("♻️ Restaurar selecionado");
         JButton btnExcluirDef = new JButton("❌ Excluir Definitivo");
         JButton btnEsvaziar = new JButton("🧹 Esvaziar Lixeira");
         JButton btnRestaurarTodos = new JButton("♻️ Restaurar Todos");
 
+        estilizaBotao(btnRestaurar);
+        estilizaBotao(btnExcluirDef);
+        estilizaBotao(btnEsvaziar);
+        estilizaBotao(btnRestaurarTodos);
 
         painelBotoesLixeira.add(btnRestaurar);
         painelBotoesLixeira.add(btnRestaurarTodos);
@@ -82,6 +112,13 @@ public class UsuarioGUI extends JFrame {
         add(tabbedPane);
 
         atualizarTabelas();
+    }
+
+    private void estilizaBotao(JButton btn) {
+        btn.setFont(new Font("Arial", Font.BOLD, 13)); // fonte
+        btn.setBackground(Cores.AZUL_MEDIO); // cor de fundo
+        btn.setForeground(Color.white);  // cor do texto
+        btn.setPreferredSize(new Dimension(190, 40)); // tamanho preferido
     }
 
     private void atualizarTabelas() {
@@ -227,7 +264,6 @@ public class UsuarioGUI extends JFrame {
         }
     }
 
-
     private void restaurarTodosUsuarios() {
         int confirm = JOptionPane.showConfirmDialog(
             this,
@@ -261,7 +297,6 @@ public class UsuarioGUI extends JFrame {
             }
         }
     }
-
 
     private void esvaziarLixeira() {
         int confirm = JOptionPane.showConfirmDialog(

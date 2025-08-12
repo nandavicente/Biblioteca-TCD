@@ -8,7 +8,7 @@ Criação de um sistema de gerenciamento de biblioteca para a Biblioteca Central
 ### 📙 Livro
 
 <p align="center">
-  <img src="images/Livro_UML.png" alt="Diagrama UML da entidade Livro" width="300">
+  <img src="src/main/resources/images/Livro_UML.png" alt="Diagrama UML da entidade Livro" width="300">
 </p>
 
 > 💡 A entidade Livro representa os exemplares do acervo.
@@ -28,7 +28,7 @@ Criação de um sistema de gerenciamento de biblioteca para a Biblioteca Central
 ### 👤 Usuário
 
 <p align="center">
-  <img src="images/Usuario_UML.png" alt="Diagrama UML da entidade Livro" width="300">
+  <img src="src/main/resources/images/Usuario_UML.png" alt="Diagrama UML da entidade Livro" width="300">
 </p>
 
 > 💡 A entidade Usuário representa os indivíduos que interagem com a biblioteca.
@@ -46,7 +46,7 @@ Criação de um sistema de gerenciamento de biblioteca para a Biblioteca Central
 ### 📋 Empréstimo
 
 <p align="center">
-  <img src="images/Emprestimo_UML.png" alt="Diagrama UML da entidade Livro" width="300">
+  <img src="src/main/resources/images/Emprestimo_UML.png" alt="Diagrama UML da entidade Livro" width="300">
 </p>
  
 > 💡 A entidade Empréstimo formaliza a transação entre um usuário e um livro.
