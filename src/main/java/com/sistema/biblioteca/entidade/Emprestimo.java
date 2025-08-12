@@ -15,7 +15,11 @@ public class Emprestimo {
     private LocalDate dataReal;
     private boolean naLixeira = false;
 
-    //<editor-fold defaultstate="collapsed" desc="Construtores">
+
+    public Emprestimo() {
+        
+    }
+    
     public Emprestimo(int idLivro, int idUsuario) {
         this.idLivro = idLivro;
         this.idUsuario = idUsuario;
@@ -23,7 +27,7 @@ public class Emprestimo {
         this.dataPrevista = this.dataEmprestimo.plusDays(7);
         this.dataReal = null;
     }
-
+    
     //<editor-fold defaultstate="collapsed" desc="Getters/Setters">
     public long getId() {
         return id;
@@ -116,3 +120,4 @@ public class Emprestimo {
     }
 
 }
+
