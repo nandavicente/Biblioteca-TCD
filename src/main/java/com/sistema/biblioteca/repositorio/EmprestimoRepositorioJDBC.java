@@ -227,7 +227,7 @@ public class EmprestimoRepositorioJDBC implements IRepositorio<Emprestimo> {
 
     @Override
     public void restaurarPorId(Long id) {
-        String sql = "UPDATE usuario SET na_lixeira=false WHERE id=?";
+        String sql = "UPDATE emprestimo SET na_lixeira=false WHERE id=?";
         try (Connection conn = ConexaoBanco.getConexao(); PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setLong(1, id);
             stmt.executeUpdate();
