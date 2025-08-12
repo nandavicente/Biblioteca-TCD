@@ -157,9 +157,10 @@ public class EmprestimoRepositorioJDBC implements IRepositorio<Emprestimo> {
         try (Connection conn = ConexaoBanco.getConexao(); PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setLong(1, id);
-            ResultSet rs = stmt.executeQuery();
-            if (rs.next()) {
-                return mapEmprestimo(rs);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return mapEmprestimo(rs);
+                }
             }
 
         } catch (SQLException e) {
@@ -226,7 +227,7 @@ public class EmprestimoRepositorioJDBC implements IRepositorio<Emprestimo> {
 
     @Override
     public void restaurarPorId(Long id) {
-        String sql = "UPDATE usuario SET na_lixeira=false WHERE id=?";
+        String sql = "UPDATE emprestimo SET na_lixeira=false WHERE id=?";
         try (Connection conn = ConexaoBanco.getConexao(); PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setLong(1, id);
             stmt.executeUpdate();
@@ -234,4 +235,20 @@ public class EmprestimoRepositorioJDBC implements IRepositorio<Emprestimo> {
             e.printStackTrace();
         }
     }
+
+    public void atualizarDataDevolucao(Emprestimo emprestimo) {
+        // Atualiza o objeto em memória
+        emprestimo.registrarDevolucao();
+
+        // Atualiza o banco
+        String sql = "UPDATE emprestimo SET data_real = ? WHERE id = ?";
+        try (Connection conn = ConexaoBanco.getConexao(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setDate(1, java.sql.Date.valueOf(emprestimo.getDataReal()));
+            stmt.setLong(2, emprestimo.getId());
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
 }
