@@ -13,20 +13,19 @@ public class EmprestimoRepositorioJDBC implements IRepositorio<Emprestimo> {
     @Override
     public void salvar(Emprestimo obj) {
         String sql = "INSERT INTO emprestimo (id_livro, id_usuario, data_emprestimo, data_prevista, data_real, na_lixeira) VALUES (?, ?, ?, ?, ?, ?)";
-        try (Connection conn = ConexaoBanco.getConexao();
-             PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+        try (Connection conn = ConexaoBanco.getConexao(); PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
             stmt.setInt(1, obj.getIdLivro());
             stmt.setInt(2, obj.getIdUsuario());
             stmt.setDate(3, Date.valueOf(obj.getDataEmprestimo()));
             stmt.setDate(4, Date.valueOf(obj.getDataPrevista()));
-            
+
             if (obj.getDataReal() != null) {
                 stmt.setDate(5, Date.valueOf(obj.getDataReal()));
             } else {
                 stmt.setNull(5, Types.DATE);
             }
-            
+
             stmt.setBoolean(6, obj.isNaLixeira());
 
             stmt.executeUpdate();
@@ -44,8 +43,7 @@ public class EmprestimoRepositorioJDBC implements IRepositorio<Emprestimo> {
     @Override
     public void atualizar(Emprestimo obj) {
         String sql = "UPDATE emprestimo SET id_livro=?, id_usuario=?, data_emprestimo=?, data_prevista=?, data_real=?, na_lixeira=? WHERE id=?";
-        try (Connection conn = ConexaoBanco.getConexao();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+        try (Connection conn = ConexaoBanco.getConexao(); PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setInt(1, obj.getIdLivro());
             stmt.setInt(2, obj.getIdUsuario());
@@ -71,8 +69,7 @@ public class EmprestimoRepositorioJDBC implements IRepositorio<Emprestimo> {
     @Override
     public void excluir(Long id) {
         String sql = "DELETE FROM emprestimo WHERE id=?";
-        try (Connection conn = ConexaoBanco.getConexao();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+        try (Connection conn = ConexaoBanco.getConexao(); PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setLong(1, id);
             stmt.executeUpdate();
         } catch (SQLException e) {
@@ -83,8 +80,7 @@ public class EmprestimoRepositorioJDBC implements IRepositorio<Emprestimo> {
     @Override
     public Emprestimo buscarPorId(Long id) {
         String sql = "SELECT * FROM emprestimo WHERE id=? AND na_lixeira=false";
-        try (Connection conn = ConexaoBanco.getConexao();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+        try (Connection conn = ConexaoBanco.getConexao(); PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setLong(1, id);
             ResultSet rs = stmt.executeQuery();
@@ -102,9 +98,7 @@ public class EmprestimoRepositorioJDBC implements IRepositorio<Emprestimo> {
     public List<Emprestimo> buscarTodos() {
         List<Emprestimo> lista = new ArrayList<>();
         String sql = "SELECT * FROM emprestimo WHERE na_lixeira=false";
-        try (Connection conn = ConexaoBanco.getConexao();
-             PreparedStatement stmt = conn.prepareStatement(sql);
-             ResultSet rs = stmt.executeQuery()) {
+        try (Connection conn = ConexaoBanco.getConexao(); PreparedStatement stmt = conn.prepareStatement(sql); ResultSet rs = stmt.executeQuery()) {
 
             while (rs.next()) {
                 lista.add(mapEmprestimo(rs));
@@ -124,8 +118,7 @@ public class EmprestimoRepositorioJDBC implements IRepositorio<Emprestimo> {
     @Override
     public void moverParaLixeiraPorId(Long id) {
         String sql = "UPDATE emprestimo SET na_lixeira=true WHERE id=?";
-        try (Connection conn = ConexaoBanco.getConexao();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+        try (Connection conn = ConexaoBanco.getConexao(); PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setLong(1, id);
             stmt.executeUpdate();
@@ -146,9 +139,7 @@ public class EmprestimoRepositorioJDBC implements IRepositorio<Emprestimo> {
     public List<Emprestimo> recuperarTodosDaLixeira() {
         List<Emprestimo> lista = new ArrayList<>();
         String sql = "SELECT * FROM emprestimo WHERE na_lixeira=true";
-        try (Connection conn = ConexaoBanco.getConexao();
-             PreparedStatement stmt = conn.prepareStatement(sql);
-             ResultSet rs = stmt.executeQuery()) {
+        try (Connection conn = ConexaoBanco.getConexao(); PreparedStatement stmt = conn.prepareStatement(sql); ResultSet rs = stmt.executeQuery()) {
 
             while (rs.next()) {
                 lista.add(mapEmprestimo(rs));
@@ -163,8 +154,7 @@ public class EmprestimoRepositorioJDBC implements IRepositorio<Emprestimo> {
     @Override
     public Emprestimo recuperarDaLixeiraPorId(Long id) {
         String sql = "SELECT * FROM emprestimo WHERE id=? AND na_lixeira=true";
-        try (Connection conn = ConexaoBanco.getConexao();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+        try (Connection conn = ConexaoBanco.getConexao(); PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setLong(1, id);
             ResultSet rs = stmt.executeQuery();
@@ -186,8 +176,7 @@ public class EmprestimoRepositorioJDBC implements IRepositorio<Emprestimo> {
     @Override
     public void excluirDefinitivoPorId(Long id) {
         String sql = "DELETE FROM emprestimo WHERE id=? AND na_lixeira=true";
-        try (Connection conn = ConexaoBanco.getConexao();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+        try (Connection conn = ConexaoBanco.getConexao(); PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setLong(1, id);
             stmt.executeUpdate();
@@ -200,8 +189,7 @@ public class EmprestimoRepositorioJDBC implements IRepositorio<Emprestimo> {
     @Override
     public void esvaziarLixeira() {
         String sql = "DELETE FROM emprestimo WHERE na_lixeira=true";
-        try (Connection conn = ConexaoBanco.getConexao();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+        try (Connection conn = ConexaoBanco.getConexao(); PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.executeUpdate();
 
@@ -224,5 +212,26 @@ public class EmprestimoRepositorioJDBC implements IRepositorio<Emprestimo> {
         }
         e.setNaLixeira(rs.getBoolean("na_lixeira"));
         return e;
+    }
+
+    @Override
+    public void restaurarTodosDaLixeira() {
+        String sql = "UPDATE emprestimo SET na_lixeira=false WHERE na_lixeira=true";
+        try (Connection conn = ConexaoBanco.getConexao(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void restaurarPorId(Long id) {
+        String sql = "UPDATE usuario SET na_lixeira=false WHERE id=?";
+        try (Connection conn = ConexaoBanco.getConexao(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setLong(1, id);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }
