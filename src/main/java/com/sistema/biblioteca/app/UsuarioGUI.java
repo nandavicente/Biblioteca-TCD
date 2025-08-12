@@ -24,13 +24,32 @@ public class UsuarioGUI extends JFrame {
             System.err.println("Não foi possível aplicar o LookAndFeel Nimbus");
         }
 
+        // Definições iniciais da Interface Gráfica / Janela
         usuarioRepo = new UsuarioRepositorioJDBC();
         setTitle("Gerenciamento de Usuários");
         setSize(1000, 800);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
+        setBackground(new Color(2, 28, 65));
 
+        // --------- Painel superior --------------
+        // Painel superior com botão Voltar
+        JPanel painelTopo = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        painelTopo.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10)); // cima, esquerda, baixo, direita
+
+        JButton btnVoltar = criarBotaoEstilizado("⬅", 38, 102, 140, 255, 255, 255);
+        btnVoltar.addActionListener(e -> {
+            dispose(); // Fecha a janela atual
+            //new BibliotecaAppGUI().setVisible(true); // Volta para tela inicial
+        });
+        painelTopo.add(btnVoltar);
+
+        // Adiciona o painelTopo antes de tudo
+        add(painelTopo, BorderLayout.NORTH);
+
+        // ---------------- Painéis com as tabelas --------------------------------
         tabbedPane = new JTabbedPane();
+        tabbedPane.setBorder(BorderFactory.createEmptyBorder(0, 40, 20, 40));
 
         // Painel de usuários ativos
         JPanel painelAtivos = new JPanel(new BorderLayout());
@@ -38,10 +57,15 @@ public class UsuarioGUI extends JFrame {
         tabelaAtivos.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION); // permite selecionar várias linhas
         painelAtivos.add(new JScrollPane(tabelaAtivos), BorderLayout.CENTER);
 
+        // Rodapé do painel de usuários ativos
         JPanel painelBotoesAtivos = new JPanel();
         JButton btnAdicionar = new JButton("➕ Adicionar");
         JButton btnEditar = new JButton("✏️ Editar");
         JButton btnMoverLixeira = new JButton("🗑️ Mover para Lixeira");
+
+        estilizaBotao(btnAdicionar);
+        estilizaBotao(btnEditar);
+        estilizaBotao(btnMoverLixeira);
 
         painelBotoesAtivos.add(btnAdicionar);
         painelBotoesAtivos.add(btnEditar);
@@ -58,12 +82,17 @@ public class UsuarioGUI extends JFrame {
         tabelaLixeira.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION); // permite selecionar várias linhas
         painelLixeira.add(new JScrollPane(tabelaLixeira), BorderLayout.CENTER);
 
+        // Rodapé do painel de lixeira
         JPanel painelBotoesLixeira = new JPanel();
         JButton btnRestaurar = new JButton("♻️ Restaurar selecionado");
         JButton btnExcluirDef = new JButton("❌ Excluir Definitivo");
         JButton btnEsvaziar = new JButton("🧹 Esvaziar Lixeira");
         JButton btnRestaurarTodos = new JButton("♻️ Restaurar Todos");
 
+        estilizaBotao(btnRestaurar);
+        estilizaBotao(btnExcluirDef);
+        estilizaBotao(btnEsvaziar);
+        estilizaBotao(btnRestaurarTodos);
 
         painelBotoesLixeira.add(btnRestaurar);
         painelBotoesLixeira.add(btnRestaurarTodos);
@@ -81,7 +110,41 @@ public class UsuarioGUI extends JFrame {
 
         add(tabbedPane);
 
+
         atualizarTabelas();
+    }
+
+    private void estilizaBotao(JButton btn) {
+        btn.setFont(new Font("Arial", Font.BOLD, 13)); // fonte
+        btn.setBackground(new Color(38, 102, 140)); // cor de fundo
+        btn.setForeground(Color.white);  // cor do texto
+        btn.setPreferredSize(new Dimension(190, 40)); // tamanho preferido
+    }
+
+    // Método_ para estilizar botões
+    private JButton criarBotaoEstilizado(String texto, int red, int green, int blue, int fontRed, int fontGreen, int fontBlue) {
+         JButton botao = new JButton(texto) {
+            @Override
+            protected void paintComponent(Graphics g) {
+                Graphics2D g2 = (Graphics2D) g.create();
+                g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                g2.setColor(new Color(red, green, blue)); // Cor de fundo
+                g2.fillRoundRect(0, 0, getWidth(), getHeight(), 80, 80); // arredondamento
+                super.paintComponent(g);
+                g2.dispose();
+            }
+        };
+
+        botao.setFont(new Font("Arial", Font.PLAIN, 14));
+        botao.setFocusPainted(false);
+        botao.setForeground(new Color(fontRed, fontGreen, fontBlue)); // cor do texto
+        botao.setContentAreaFilled(false); // impede pintura quadrada
+        botao.setBorderPainted(false);     // tira borda padrão
+        botao.setPreferredSize(new Dimension(40, 40));
+        botao.setMaximumSize(new Dimension(40, 40));
+        botao.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        return botao;
     }
 
     private void atualizarTabelas() {
@@ -227,7 +290,6 @@ public class UsuarioGUI extends JFrame {
         }
     }
 
-
     private void restaurarTodosUsuarios() {
         int confirm = JOptionPane.showConfirmDialog(
             this,
@@ -261,7 +323,6 @@ public class UsuarioGUI extends JFrame {
             }
         }
     }
-
 
     private void esvaziarLixeira() {
         int confirm = JOptionPane.showConfirmDialog(
