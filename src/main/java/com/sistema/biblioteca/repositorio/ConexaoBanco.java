@@ -53,6 +53,18 @@ public class ConexaoBanco {
                     na_lixeira BOOLEAN DEFAULT FALSE
                 )
             """);
+
+            stmt.executeUpdate("""
+                CREATE TABLE IF NOT EXISTS emprestimo (
+                    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+                    id_livro INT NOT NULL,
+                    id_usuario INT NOT NULL,
+                    data_emprestimo DATE NOT NULL,
+                    data_prevista DATE NOT NULL,
+                    data_real DATE,
+                    na_lixeira BOOLEAN DEFAULT FALSE
+                )
+            """);
         }
 
         conexao.setCatalog("biblioteca");
