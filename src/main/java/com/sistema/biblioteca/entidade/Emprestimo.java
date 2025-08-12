@@ -1,6 +1,5 @@
 package com.sistema.biblioteca.entidade;
-
-/**
+/** 
  *
  * @author aline
  */
@@ -17,20 +16,14 @@ public class Emprestimo {
     private boolean naLixeira = false;
 
     //<editor-fold defaultstate="collapsed" desc="Construtores">
-    public Emprestimo(int id, int idLivro, int idUsuario,
-            LocalDate dataEmprestimo, LocalDate dataPrevista, LocalDate dataReal) {
+    public Emprestimo(int id, int idLivro, int idUsuario) {
         this.id = id;
         this.idLivro = idLivro;
         this.idUsuario = idUsuario;
-        this.dataEmprestimo = dataEmprestimo;
-        this.dataPrevista = dataPrevista;
-        this.dataReal = dataReal;
+        this.dataEmprestimo = LocalDate.now();
+        this.dataPrevista = this.dataEmprestimo.plusDays(7);
+        this.dataReal = null;
     }
-
-    // Construtor vazio (caso precise criar sem valores iniciais)
-    public Emprestimo() {
-    }
-    //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="Getters/Setters">
     public long getId() {
@@ -89,17 +82,38 @@ public class Emprestimo {
         this.naLixeira = naLixeira;
     }
     //</editor-fold>
-    
-     // Metodo_para exibir
+
+    public void registrarDevolução() {
+        this.dataReal = LocalDate.now();
+    }
+
+    // Metodo_para exibir
     @Override
     public String toString() {
-        return "Emprestimo{" +
-                "id=" + id +
-                ", id livro =" + idLivro +
-                ", id usuario =" + idUsuario +
-                ", data Emprestimo =" + dataEmprestimo +
-                ", Devolucao =" + dataPrevista +
-                '}';
+        String status;
+
+        if (dataReal != null) {
+            if (dataReal.isAfter(dataPrevista)) {
+                status = "Devolvido com atraso";
+            } else {
+                status = "Devolvido";
+            }
+        } else {
+            if (LocalDate.now().isAfter(dataPrevista)) {
+                status = "Atrasado";
+            } else {
+                status = "Dentro do prazo";
+            }
+        }
+
+        return "Emprestimo{"
+                + "id=" + id
+                + ", id livro=" + idLivro
+                + ", id usuario=" + idUsuario
+                + ", data emprestimo=" + dataEmprestimo
+                + ", devolução prevista=" + dataPrevista
+                + ", status=" + status
+                + '}';
     }
 
 }
