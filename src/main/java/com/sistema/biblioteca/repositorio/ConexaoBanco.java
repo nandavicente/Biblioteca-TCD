@@ -46,11 +46,12 @@ public class ConexaoBanco {
 
             stmt.executeUpdate("""
                 CREATE TABLE IF NOT EXISTS livro (
-                    id BIGINT AUTO_INCREMENT PRIMARY KEY,
-                    titulo VARCHAR(255) NOT NULL,
-                    autor VARCHAR(255) NOT NULL,
-                    ano_publicacao INT,
-                    na_lixeira BOOLEAN DEFAULT FALSE
+                        id BIGINT AUTO_INCREMENT PRIMARY KEY,
+                        titulo VARCHAR(255) NOT NULL,
+                        autor VARCHAR(255) NOT NULL,
+                        editora VARCHAR(255),
+                        ano_publicacao INT,
+                        na_lixeira BOOLEAN DEFAULT FALSE
                 )
             """);
 
