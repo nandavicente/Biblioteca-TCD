@@ -20,11 +20,6 @@ Criação de um sistema de gerenciamento de biblioteca para a Biblioteca Central
 - **ano** _(inteiro)_ e 
 - **disponivel** _(booleano)_.
 
-**Regras de Negócio:** 
-- Um livro pode ser emprestado somente se seu status estiver como disponivel. 
-- Ao ser emprestado, o atributo disponivel deve ser atualizado para ```false```, e retorna a ```true``` quando o livro é devolvido.
-<br/>
-
 ### 👤 Usuário
 
 <p align="center">
@@ -39,9 +34,6 @@ Criação de um sistema de gerenciamento de biblioteca para a Biblioteca Central
 - **matricula** _(texto)_ e 
 - **email** _(texto)_.
 
-**Regras de Negócio:** 
-- Apenas usuários que já possuem um cadastro no sistema podem realizar empréstimos.
-<br/>
 
 ### 📋 Empréstimo
 
@@ -59,9 +51,6 @@ Criação de um sistema de gerenciamento de biblioteca para a Biblioteca Central
 - **dataPrevista** _(data)_ e 
 - **dataReal** _(data)_.
 
-**Regras de Negócio:**
-- A data de devolução prevista é determinada somando 7 dias à dataEmprestimo.
-- Quando a devolução é registrada, a dataReal deve ser preenchida e o status do livro correspondente deve ser atualizado para disponível.
 
 ## Funcionalidades do sistema ⚙️
 As seguintes funcionalidades serão implementadas para cada entidade:
@@ -78,19 +67,6 @@ Um mecanismo lógico para exclusão, oferecendo as seguintes operações:
 - **Restaurar:** Trazer um item da lixeira de volta ao seu estado ativo.
 - **Excluir definitivamente:** Remover um item da lixeira de forma permanente.
 - **Esvaziar lixeira:** Excluir todos os itens da lixeira de forma permanente.
-
-
-### 📝 Relatórios
-O sistema disponibilizará relatórios simplificados para consulta:
-- **Livros disponíveis:** Lista de todos os livros que podem ser emprestados.
-- **Empréstimos ativos:** Lista de todos os empréstimos em curso.
-- **Histórico de empréstimos:** Registro completo de todos os empréstimos já realizados.
-
-
-## Relacionamentos 🔁
-### Relacionamentos entre Entidades
-- **Usuário e Empréstimo:** Um usuário pode realizar múltiplos empréstimos, mas cada empréstimo pertence a apenas um usuário. _(Relacionamento de 1 para N)_.
-- **Livro e Empréstimo:** Um livro pode ser emprestado múltiplas vezes, mas cada empréstimo se refere a um único livro. _(Relacionamento de 1 para N)_.
 
 
 ## Considerações Finais
