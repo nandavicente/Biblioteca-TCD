@@ -3,8 +3,7 @@ package com.sistema.biblioteca.app;
 import com.sistema.biblioteca.entidade.Livro;
 import com.sistema.biblioteca.repositorio.IRepositorio;
 import com.sistema.biblioteca.repositorio.LivroRepositorioJDBC;
-import com.sistema.biblioteca.util.Cores;
-import com.sistema.biblioteca.util.Desenha;
+import com.sistema.biblioteca.util.*;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -25,7 +24,6 @@ public class LivroGUI extends JFrame {
             System.err.println("Não foi possível aplicar o LookAndFeel Nimbus");
         }
 
-        livroRepo = new LivroRepositorioJDBC();
         setTitle("Gerenciamento de Livros");
         setSize(1000, 800);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -111,7 +109,7 @@ public class LivroGUI extends JFrame {
 
     private void atualizarTabelas() {
         DefaultTableModel modeloAtivos = new DefaultTableModel(
-                new Object[]{"ID", "Título", "Autor", "ISBN"}, 0
+                new Object[]{"ID", "Título", "Autor", "Editora", "Ano Publicação"}, 0
         ){
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -120,13 +118,19 @@ public class LivroGUI extends JFrame {
         };
 
         livroRepo.buscarTodos().forEach(l ->
-                modeloAtivos.addRow(new Object[]{l.getId(), l.getTitulo(), l.getAutor(), l.getIsbn()})
+                modeloAtivos.addRow(new Object[]{
+                        l.getId(),
+                        l.getTitulo(),
+                        l.getAutor(),
+                        l.getEditora(),
+                        l.getAnoPublicacao()
+                })
         );
         tabelaAtivos.setModel(modeloAtivos);
         ajustarColunas(tabelaAtivos);
 
         DefaultTableModel modeloLixeira = new DefaultTableModel(
-                new Object[]{"ID", "Título", "Autor", "ISBN"}, 0
+                new Object[]{"ID", "Título", "Autor", "Editora", "Ano Publicação"}, 0
         ){
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -134,7 +138,13 @@ public class LivroGUI extends JFrame {
             }
         };
         livroRepo.recuperarTodosDaLixeira().forEach(l ->
-                modeloLixeira.addRow(new Object[]{l.getId(), l.getTitulo(), l.getAutor(), l.getIsbn()})
+                modeloLixeira.addRow(new Object[]{
+                        l.getId(),
+                        l.getTitulo(),
+                        l.getAutor(),
+                        l.getEditora(),
+                        l.getAnoPublicacao()
+                })
         );
         tabelaLixeira.setModel(modeloLixeira);
         ajustarColunas(tabelaLixeira);
@@ -147,36 +157,40 @@ public class LivroGUI extends JFrame {
         tabela.getColumnModel().getColumn(0).setPreferredWidth(40);
         tabela.getColumnModel().getColumn(1).setPreferredWidth(200);
         tabela.getColumnModel().getColumn(2).setPreferredWidth(150);
-        tabela.getColumnModel().getColumn(3).setPreferredWidth(120);
+        tabela.getColumnModel().getColumn(3).setPreferredWidth(150);
+        tabela.getColumnModel().getColumn(4).setPreferredWidth(120);
     }
 
     private void adicionarLivro() {
         JTextField tituloField = new JTextField();
         JTextField autorField = new JTextField();
-        JTextField isbnField = new JTextField();
+        JTextField editoraField = new JTextField();
+        JTextField anoField = new JTextField();
 
         Object[] mensagem = {
                 "Título:", tituloField,
                 "Autor:", autorField,
-                "ISBN:", isbnField
+                "Editora:", editoraField,
+                "Ano de Publicação:", anoField
         };
 
         int opcao = JOptionPane.showConfirmDialog(
-                this,
-                mensagem,
-                "Adicionar Livro",
-                JOptionPane.OK_CANCEL_OPTION
+                this, mensagem, "Adicionar Livro", JOptionPane.OK_CANCEL_OPTION
         );
         if (opcao == JOptionPane.OK_OPTION) {
-            if (tituloField.getText().trim().isEmpty() || autorField.getText().trim().isEmpty() || isbnField.getText().trim().isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Dados inválidos. Verifique os campos.", "Erro", JOptionPane.ERROR_MESSAGE);
+            if (tituloField.getText().trim().isEmpty() ||
+                    autorField.getText().trim().isEmpty() ||
+                    editoraField.getText().trim().isEmpty() ||
+                    anoField.getText().trim().isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Dados inválidos.", "Erro", JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
             Livro novo = new Livro();
             novo.setTitulo(tituloField.getText());
             novo.setAutor(autorField.getText());
-            novo.setIsbn(isbnField.getText());
+            novo.setEditora(editoraField.getText());
+            novo.setAnoPublicacao(Integer.parseInt(anoField.getText()));
             livroRepo.salvar(novo);
 
             atualizarTabelas();
@@ -191,28 +205,24 @@ public class LivroGUI extends JFrame {
 
             JTextField tituloField = new JTextField(livro.getTitulo());
             JTextField autorField = new JTextField(livro.getAutor());
-            JTextField isbnField = new JTextField(livro.getIsbn());
+            JTextField editoraField = new JTextField(livro.getEditora());
+            JTextField anoField = new JTextField(String.valueOf(livro.getAnoPublicacao()));
 
             Object[] mensagem = {
                     "Título:", tituloField,
                     "Autor:", autorField,
-                    "ISBN:", isbnField
+                    "Editora:", editoraField,
+                    "Ano de Publicação:", anoField
             };
 
             int opcao = JOptionPane.showConfirmDialog(
-                    this,
-                    mensagem,
-                    "Editar Livro",
-                    JOptionPane.OK_CANCEL_OPTION
+                    this, mensagem, "Editar Livro", JOptionPane.OK_CANCEL_OPTION
             );
             if (opcao == JOptionPane.OK_OPTION) {
-                if (tituloField.getText().trim().isEmpty() || autorField.getText().trim().isEmpty() || isbnField.getText().trim().isEmpty()) {
-                    JOptionPane.showMessageDialog(this, "Dados inválidos. Verifique os campos.", "Erro", JOptionPane.ERROR_MESSAGE);
-                    return;
-                }
                 livro.setTitulo(tituloField.getText());
                 livro.setAutor(autorField.getText());
-                livro.setIsbn(isbnField.getText());
+                livro.setEditora(editoraField.getText());
+                livro.setAnoPublicacao(Integer.parseInt(anoField.getText()));
                 livroRepo.atualizar(livro);
                 atualizarTabelas();
             }
@@ -231,9 +241,7 @@ public class LivroGUI extends JFrame {
                 for (int linha : linhas) {
                     Long id = (Long) tabelaAtivos.getValueAt(linha, 0);
                     Livro livro = livroRepo.buscarPorId(id);
-                    if (livro != null) {
-                        lista.add(livro);
-                    }
+                    if (livro != null) lista.add(livro);
                 }
                 livroRepo.moverColecaoParaLixeira(lista);
                 atualizarTabelas();
@@ -254,10 +262,8 @@ public class LivroGUI extends JFrame {
 
     private void restaurarTodosLivros() {
         int confirm = JOptionPane.showConfirmDialog(
-                this,
-                "Deseja restaurar todos os livros da lixeira?",
-                "Confirmação",
-                JOptionPane.YES_NO_OPTION
+                this, "Deseja restaurar todos os livros da lixeira?",
+                "Confirmação", JOptionPane.YES_NO_OPTION
         );
         if (confirm == JOptionPane.YES_OPTION) {
             if (livroRepo instanceof LivroRepositorioJDBC jdbcRepo) {
@@ -271,10 +277,8 @@ public class LivroGUI extends JFrame {
         int[] linhas = tabelaLixeira.getSelectedRows();
         if (linhas.length > 0) {
             int confirm = JOptionPane.showConfirmDialog(
-                    this,
-                    "Excluir definitivamente os livros selecionados?",
-                    "Confirmação",
-                    JOptionPane.YES_NO_OPTION
+                    this, "Excluir definitivamente os livros selecionados?",
+                    "Confirmação", JOptionPane.YES_NO_OPTION
             );
             if (confirm == JOptionPane.YES_OPTION) {
                 for (int linha : linhas) {
@@ -288,10 +292,8 @@ public class LivroGUI extends JFrame {
 
     private void esvaziarLixeira() {
         int confirm = JOptionPane.showConfirmDialog(
-                this,
-                "Esvaziar toda a lixeira?",
-                "Confirmação",
-                JOptionPane.YES_NO_OPTION
+                this, "Esvaziar toda a lixeira?",
+                "Confirmação", JOptionPane.YES_NO_OPTION
         );
         if (confirm == JOptionPane.YES_OPTION) {
             livroRepo.esvaziarLixeira();

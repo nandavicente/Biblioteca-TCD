@@ -13,7 +13,7 @@ public class LivroRepositorioJDBC implements IRepositorio<Livro> {
 
     @Override
     public void salvar(Livro obj) {
-        String sql = "INSERT INTO livros (titulo, autor, editora, ano_publicacao, na_lixeira) VALUES (?, ?, ?, ?, false)";
+        String sql = "INSERT INTO livro (titulo, autor, editora, ano_publicacao, na_lixeira) VALUES (?, ?, ?, ?, false)";
         try (Connection conn = ConexaoBanco.getConexao();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, obj.getTitulo());
@@ -28,7 +28,7 @@ public class LivroRepositorioJDBC implements IRepositorio<Livro> {
 
     @Override
     public void atualizar(Livro obj) {
-        String sql = "UPDATE livros SET titulo=?, autor=?, editora=?, ano_publicacao=? WHERE id=?";
+        String sql = "UPDATE livro SET titulo=?, autor=?, editora=?, ano_publicacao=? WHERE id=?";
         try (Connection conn = ConexaoBanco.getConexao();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, obj.getTitulo());
@@ -44,7 +44,7 @@ public class LivroRepositorioJDBC implements IRepositorio<Livro> {
 
     @Override
     public void excluir(Long id) {
-        String sql = "DELETE FROM usuario WHERE id=?";
+        String sql = "DELETE FROM livro WHERE id=?";
         try (Connection conn = ConexaoBanco.getConexao();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setLong(1, id);
@@ -56,7 +56,7 @@ public class LivroRepositorioJDBC implements IRepositorio<Livro> {
 
     @Override
     public Livro buscarPorId(Long id) {
-        String sql = "SELECT * FROM livros WHERE id=?";
+        String sql = "SELECT * FROM livro WHERE id=?";
         try (Connection conn = ConexaoBanco.getConexao();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setLong(1, id);
@@ -72,7 +72,7 @@ public class LivroRepositorioJDBC implements IRepositorio<Livro> {
 
     @Override
     public List<Livro> buscarTodos() {
-        String sql = "SELECT * FROM livros WHERE na_lixeira=false";
+        String sql = "SELECT * FROM livro WHERE na_lixeira=false";
         List<Livro> lista = new ArrayList<>();
         try (Connection conn = ConexaoBanco.getConexao();
              PreparedStatement stmt = conn.prepareStatement(sql);
@@ -106,7 +106,7 @@ public class LivroRepositorioJDBC implements IRepositorio<Livro> {
 
     @Override
     public void moverColecaoParaLixeira(List<Livro> entidades) {
-        String sql = "UPDATE livros SET na_lixeira=true WHERE id=?";
+        String sql = "UPDATE livro SET na_lixeira=true WHERE id=?";
         try (Connection conn = ConexaoBanco.getConexao();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             for (Livro livro : entidades) {
@@ -153,7 +153,7 @@ public class LivroRepositorioJDBC implements IRepositorio<Livro> {
 
     @Override
     public void restaurarPorId(Long id) {
-        String sql = "UPDATE livros SET na_lixeira=false WHERE id=?";
+        String sql = "UPDATE livro SET na_lixeira=false WHERE id=?";
         try (Connection conn = ConexaoBanco.getConexao();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setLong(1, id);
@@ -192,7 +192,7 @@ public class LivroRepositorioJDBC implements IRepositorio<Livro> {
 
     @Override
     public void esvaziarLixeira() {
-        String sql = "DELETE FROM livros WHERE na_lixeira=true";
+        String sql = "DELETE FROM livro WHERE na_lixeira=true";
         try (Connection conn = ConexaoBanco.getConexao();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.executeUpdate();

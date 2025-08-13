@@ -110,7 +110,7 @@ public class BibliotecaAppGUI extends JFrame {
         // ---------- AÇÕES ----------
         btnUsuarios.addActionListener(e -> new UsuarioGUI().setVisible(true));
         btnLivros.addActionListener(e -> new LivroGUI().setVisible(true));
-        btnEmprestimos.addActionListener(e -> JOptionPane.showMessageDialog(this, "Tela de Empréstimos em desenvolvimento"));
+        btnEmprestimos.addActionListener(e -> new EmprestimoGUI().setVisible(true));
     }
 
     public static void main(String[] args) {
